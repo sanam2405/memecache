@@ -17,7 +17,12 @@ int main()
     cache.Put("Hello", 100);
     cache.Put("world", 6996);
 
-    std::cout << cache.Get("Hello") << cache.Get("world") << '\n';
+    std::cout << "Value for key '"
+              << "Hello"
+              << "': " << cache.Get("Hello") << '\n';
+    std::cout << "Value for key '"
+              << "world"
+              << "': " << cache.Get("world") << '\n';
 
     return 0;
 }
