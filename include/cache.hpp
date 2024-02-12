@@ -20,7 +20,8 @@ namespace caches
      * Key - Type of a key [the key should be a hash-able one]
      * Value - Type of a value stored in the cache
      * Policy - Type of a policy to be used with the cache
-     * HashMap - Type of the hashmap to use for caching. Might be extended to have `std::unordered_map` compatible interfaces
+     * HashMap - Type of the hashmap to use for caching. Might be extended to have `std::unordered_map` compatible
+     * interfaces
      */
     template <typename Key, typename Value, template <typename> class Policy = NoCachePolicy,
               typename HashMap = std::unordered_map<Key, Value>>
@@ -30,7 +31,7 @@ namespace caches
         using iterator = typename HashMap::iterator;
         using const_iterator = typename HashMap::const_iterator;
         using operation_guard = typename std::lock_guard<std::mutex>;
-        using on_erase_cb = typename std::function<void(const Key &key, const Value &value)>;
+        using on_erase_cb = typename std::function<void(const Key& key, const Value& value)>;
 
         /*
          * Fixed sized cache constructor
@@ -41,8 +42,8 @@ namespace caches
          */
         explicit fixed_sized_cache(
             size_t max_size, const Policy<Key> policy = Policy<Key>{},
-            on_erase_cb on_erase = [](const Key &, const Value &) {})
-            : cache_policy{policy}, max_cache_size{max_size}, on_erase_callback{on_erase}
+            on_erase_cb on_erase = [](const Key&, const Value&) {})
+                : cache_policy{policy}, max_cache_size{max_size}, on_erase_callback{on_erase}
         {
             if (max_cache_size == 0)
             {
@@ -50,17 +51,14 @@ namespace caches
             }
         }
 
-        ~fixed_sized_cache() noexcept
-        {
-            Clear();
-        }
+        ~fixed_sized_cache() noexcept { Clear(); }
 
         /*
          * Puts element into the cache
          * key - The Key to which value has to be assigned
          * value - The Value to assign to the given key
          */
-        void Put(const Key &key, const Value &value) noexcept
+        void Put(const Key& key, const Value& value) noexcept
         {
             operation_guard lock{safe_operation};
             auto element_iterator = FindElem(key);
@@ -92,7 +90,7 @@ namespace caches
          * the returned iterator can be used to access the element. Otherwise, if pair's boolean value
          * is false, the element is not presented in the cache.
          */
-        std::pair<const_iterator, bool> TryGet(const Key &key) const noexcept
+        std::pair<const_iterator, bool> TryGet(const Key& key) const noexcept
         {
             operation_guard lock{safe_operation};
             return GetInternal(key);
@@ -103,7 +101,7 @@ namespace caches
          * key - Element's key that we are trying to get
          * Returns reference to the value stored by the specified key in the cache
          */
-        const Value &Get(const Key &key) const
+        const Value& Get(const Key& key) const
         {
             operation_guard lock{safe_operation};
             auto element = GetInternal(key);
@@ -124,7 +122,7 @@ namespace caches
          * Returns true if the element key is presented
          * Returns false if the element key is not presented
          */
-        bool Cached(const Key &key) const noexcept
+        bool Cached(const Key& key) const noexcept
         {
             operation_guard lock{safe_operation};
             return FindElem(key) != cache_items_map.cend();
@@ -146,7 +144,7 @@ namespace caches
          * Returns true if the element specified by the key was found and successfully deleted
          * Returns false if the element is not present in a cache and could not be found
          */
-        bool Remove(const Key &key)
+        bool Remove(const Key& key)
         {
             operation_guard lock{safe_operation};
 
@@ -168,23 +166,16 @@ namespace caches
             operation_guard lock{safe_operation};
 
             std::for_each(begin(), end(),
-                          [&](const std::pair<const Key, Value> &element)
-                          { cache_policy.Erase(element.first); });
+                          [&](const std::pair<const Key, Value>& element) { cache_policy.Erase(element.first); });
             cache_items_map.clear();
         }
 
-        const_iterator begin() const noexcept
-        {
-            return cache_items_map.cbegin();
-        }
+        const_iterator begin() const noexcept { return cache_items_map.cbegin(); }
 
-        const_iterator end() const noexcept
-        {
-            return cache_items_map.cend();
-        }
+        const_iterator end() const noexcept { return cache_items_map.cend(); }
 
     protected:
-        void Insert(const Key &key, const Value &value)
+        void Insert(const Key& key, const Value& value)
         {
             cache_policy.Insert(key);
             cache_items_map.emplace(std::make_pair(key, value));
@@ -197,25 +188,22 @@ namespace caches
             cache_items_map.erase(element);
         }
 
-        void Erase(const Key &key)
+        void Erase(const Key& key)
         {
             auto element_iterator = FindElem(key);
 
             Erase(element_iterator);
         }
 
-        void Update(const Key &key, const Value &value)
+        void Update(const Key& key, const Value& value)
         {
             cache_policy.Touch(key);
             cache_items_map[key] = value;
         }
 
-        const_iterator FindElem(const Key &key) const
-        {
-            return cache_items_map.find(key);
-        }
+        const_iterator FindElem(const Key& key) const { return cache_items_map.find(key); }
 
-        std::pair<const_iterator, bool> GetInternal(const Key &key) const noexcept
+        std::pair<const_iterator, bool> GetInternal(const Key& key) const noexcept
         {
             auto element_iterator = FindElem(key);
 

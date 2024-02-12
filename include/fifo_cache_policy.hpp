@@ -16,8 +16,7 @@ namespace caches
      * Subsequent replacements will follow the order of addition, such as B, C, and so on.
      * Key - The type of key this policy works with
      */
-    template <typename Key>
-    class FIFOCachePolicy : public ICachePolicy<Key>
+    template <typename Key> class FIFOCachePolicy : public ICachePolicy<Key>
     {
     public:
         using fifo_iterator = typename std::list<Key>::const_iterator;
@@ -26,21 +25,21 @@ namespace caches
         ~FIFOCachePolicy() = default;
 
         // handles element insertion in the cache
-        void Insert(const Key &key) override
+        void Insert(const Key& key) override
         {
             fifo_queue.emplace_front(key);
             key_lookup[key] = fifo_queue.begin();
         }
 
         // handles request to the key-value in the cache
-        void Touch(const Key &key) noexcept override
+        void Touch(const Key& key) noexcept override
         {
             // does not do anything in the FIFO strategy
             (void)key;
         }
 
         // handles element deletion from the cache
-        void Erase(const Key &key) noexcept override
+        void Erase(const Key& key) noexcept override
         {
             auto element = key_lookup[key];
             fifo_queue.erase(element);
@@ -48,10 +47,7 @@ namespace caches
         }
 
         // returns the key of the replacement candidate for the FIFO policy
-        const Key &ReplacementCandidate() const noexcept override
-        {
-            return fifo_queue.back();
-        }
+        const Key& ReplacementCandidate() const noexcept override { return fifo_queue.back(); }
 
     private:
         std::list<Key> fifo_queue;

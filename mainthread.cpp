@@ -1,13 +1,13 @@
+#include "include/cache.hpp"
+#include "include/fifo_cache_policy.hpp"
 #include <iostream>
 #include <thread>
-#include "include/fifo_cache_policy.hpp"
-#include "include/cache.hpp"
 
 // alias for easy class typing
 template <typename Key, typename Value>
 using fifo_cache_t = typename caches::fixed_sized_cache<Key, Value, caches::FIFOCachePolicy>;
 
-void cache_operations(fifo_cache_t<std::string, int> &cache, const std::string &key, int value, bool insert)
+void cache_operations(fifo_cache_t<std::string, int>& cache, const std::string& key, int value, bool insert)
 {
     if (insert)
     {
@@ -19,7 +19,7 @@ void cache_operations(fifo_cache_t<std::string, int> &cache, const std::string &
         {
             std::cout << "Value for key '" << key << "': " << cache.Get(key) << '\n';
         }
-        catch (const std::range_error &e)
+        catch (const std::range_error& e)
         {
             std::cerr << e.what() << '\n';
         }

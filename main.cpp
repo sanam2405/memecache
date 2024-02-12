@@ -1,6 +1,6 @@
-#include <iostream>
-#include "include/fifo_cache_policy.hpp"
 #include "include/cache.hpp"
+#include "include/fifo_cache_policy.hpp"
+#include <iostream>
 
 // alias for easy class typing
 template <typename Key, typename Value>
