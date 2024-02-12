@@ -11,16 +11,22 @@ option(INSTALL_CACHES "Install caches library" OFF)
 add_executable(main main.cpp)
 add_executable(mainthread mainthread.cpp)
 
-set(CLANG_FORMAT_COMMAND "clang-format")
+find_program(CLANG_FORMAT_COMMAND clang-format)
 
-file(GLOB_RECURSE SOURCE_FILES ${CMAKE_SOURCE_DIR}/*.cpp ${CMAKE_SOURCE_DIR}/*.hpp)
-list(FILTER SOURCE_FILES EXCLUDE REGEX "build/.*")
+if(CLANG_FORMAT_COMMAND)
+    file(GLOB_RECURSE SOURCE_FILES ${CMAKE_SOURCE_DIR}/*.cpp ${CMAKE_SOURCE_DIR}/*.hpp)
+    list(FILTER SOURCE_FILES EXCLUDE REGEX "build/.*")
 
-add_custom_target(format
-    COMMAND ${CLANG_FORMAT_COMMAND} -i ${SOURCE_FILES}
-    COMMENT "Running clang-format on all source files"
-    VERBATIM
-)
+    # Define custom target for formatting
+    add_custom_target(format
+        COMMAND ${CLANG_FORMAT_COMMAND} -i ${SOURCE_FILES}
+        COMMENT "Running clang-format on all source files"
+        VERBATIM
+    )
 
-add_dependencies(main format)
-add_dependencies(mainthread format)
+    # Add dependency on format target after building main and mainthread
+    add_dependencies(main format)
+    add_dependencies(mainthread format)
+else()
+    message(STATUS "clang-format command not found. Skipping format target.")
+endif()

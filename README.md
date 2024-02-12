@@ -265,8 +265,16 @@ To implement a custom cache eviction or cache replacement policy, include the `c
 
 - Build the project
 
+For building, use `make` if available
+
 ```console
     make
+```
+
+Otherwise use the below command for building
+
+```console
+    cmake --build .
 ```
 
 - Run the executables
