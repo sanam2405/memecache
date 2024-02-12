@@ -61,7 +61,7 @@ namespace caches
         void Put(const Key& key, const Value& value) noexcept
         {
             operation_guard lock{safe_operation};
-            auto element_iterator = FindElem(key);
+            auto element_iterator = findElement(key);
 
             if (element_iterator == cache_items_map.end())
             {
@@ -125,7 +125,7 @@ namespace caches
         bool Cached(const Key& key) const noexcept
         {
             operation_guard lock{safe_operation};
-            return FindElem(key) != cache_items_map.cend();
+            return findElement(key) != cache_items_map.cend();
         }
 
         /*
@@ -148,7 +148,7 @@ namespace caches
         {
             operation_guard lock{safe_operation};
 
-            auto element = FindElem(key);
+            auto element = findElement(key);
 
             if (element == cache_items_map.end())
             {
@@ -190,7 +190,7 @@ namespace caches
 
         void Erase(const Key& key)
         {
-            auto element_iterator = FindElem(key);
+            auto element_iterator = findElement(key);
 
             Erase(element_iterator);
         }
@@ -201,11 +201,11 @@ namespace caches
             cache_items_map[key] = value;
         }
 
-        const_iterator FindElem(const Key& key) const { return cache_items_map.find(key); }
+        const_iterator findElement(const Key& key) const { return cache_items_map.find(key); }
 
         std::pair<const_iterator, bool> GetInternal(const Key& key) const noexcept
         {
-            auto element_iterator = FindElem(key);
+            auto element_iterator = findElement(key);
 
             if (element_iterator != end())
             {
