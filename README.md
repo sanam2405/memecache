@@ -16,7 +16,7 @@ An exhaustive list of cache algorithms can be found here - [Wikipedia](https://e
 
 To use this library, it is necessary to include the header containing the _cache implementation_ (`cache.hpp` file)
 and the corresponding appropriate headers containing the required cache eviction policy as per the requirement.
-If a policy is not mentioned explicitly, then `NoCachePolicy` will be implemented whereby the replacement candidate for removal is chosen to be the first key that was added in the internal `key_storage` container.
+If a policy is not mentioned explicitly, then `NoCachePolicy` is be implemented whereby the replacement candidate for removal is chosen to be the first key that was added in the internal `key_storage` container.
 
 Currently there are three cache eviction policies supported:
 
@@ -188,11 +188,12 @@ Value for key 'world': 6996
 
 ```
 
-A more exhaustive usage and demonstration of the library in shown in the `main.cpp` and `mainthread.cpp` files.
+A more exhaustive usage and demonstration of the library is shown in the `main.cpp` and `mainthread.cpp` files. Run the `./main`
+and `./mainthread` executables after building the project for demonstration purpose.
 
 ### Creating _Custom Cache Eviction Policies_
 
-To implement a custom cache eviction or cache replacement policy, include the `cache_policy.hpp` header file containing the cache policy interface and subsequently override the `Insert(...)`, `Touch(...)`, `Erase(...)` and `ReplacementCandidate(...)` methods as per the requirements.
+To implement a custom cache eviction or cache replacement policy, include the `cache_policy.hpp` header file containing the _cache policy interface_ and subsequently override the `Insert(...)`, `Touch(...)`, `Erase(...)` and `ReplacementCandidate(...)` methods as per the requirements.
 
 ```cpp
     /*
@@ -274,3 +275,5 @@ To implement a custom cache eviction or cache replacement policy, include the `c
     ./main
     ./mainthread
 ```
+
+## _Built with ❤️ by [Manas](https://sanam.live)_
