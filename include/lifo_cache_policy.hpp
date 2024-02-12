@@ -8,7 +8,7 @@
 
 namespace caches
 {
-    /**
+    /*
      * LIFO (Last in, first out) cache policy
      * This policy removes the last added element when the cache is full.
      * For example, if keys are added in the order A -> B -> C, and the cache is at capacity,
